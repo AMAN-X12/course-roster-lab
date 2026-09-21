@@ -5,11 +5,11 @@
 **University:** Quaid-i-Azam University  
 
 ## Completion Notes
-* **Parts 1-6:** Completed[cite: 1].
+* **Parts 1-7:** Fully completed.
 
 ## Self-Check Checklist Status
-* Used `const`, `final`, and `var`/explicit types deliberately[cite: 1].
-* Handled nullable values safely with `??` and `?.`[cite: 1]. 
-* Implemented `~/` and `%` operators for lab group division[cite: 1].
-* Utilized standard control flow including `if/else`, `switch` (with breaks), and the ternary operator[cite: 1].
-* *(Pending Part 7)* Implement loops (`for-in`, `forEach`) and collection literals with embedded control flow[cite: 1].
+* Used `const`, `final`, and `var`/explicit types deliberately.
+* Handled nullable values safely with `??` and `?.`. 
+* Implemented `~/` and `%` operators for lab group division.
+* Created a multi-line string description and utilized control flow (if/else, switch, ternary).
+* Built a collection literal with embedded `if` and `for` control flow.

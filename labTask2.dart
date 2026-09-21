@@ -135,4 +135,26 @@ Created At: $createdAt
 
   String statusTag = isOpen ? 'OPEN' : 'FULL';
   print(statusTag);
+
+  //part 7
+  for (var student in enrolledStudents) {
+    print(student);
+  }
+
+  attendanceCount.forEach((key, value) {
+    print('$key: $value');
+  });
+
+  List<String> announcements = [
+    'Welcome to $courseTitle',
+    if (!isOpen) 'Course is FULL — waitlist open',
+    for (var student in waitlist)
+      'Reminder: $student, please confirm attendance',
+  ];
+
+  for (var announcement in announcements) {
+    print(announcement);
+  }
+  
+
 }
