@@ -112,7 +112,58 @@ class Pair<A, B> {
   }
 }
 
+//part 5 functions
+class BookNotFoundException implements Exception {
+  final String title;
 
+  BookNotFoundException(this.title);
+}
+
+
+class BookNotAvailableException implements Exception {
+  final String title;
+
+  BookNotAvailableException(this.title);
+}
+
+
+void checkOut(Map<String, int> stock, String title) {
+  if (!stock.containsKey(title)) {
+    throw BookNotFoundException(title);
+  }
+
+  if (stock[title]! <= 0) {
+    throw BookNotAvailableException(title);
+  }
+
+  stock[title] = stock[title]! - 1;
+}
+
+
+Map<String, dynamic> findBook(String title) {
+  return books.firstWhere(
+    (book) => book['title'] == title,
+  );
+}
+
+//part 6 functions
+
+Future<String> fetchBookOfTheDay() async {
+  await Future.delayed(
+    Duration(seconds: 1),
+  );
+
+  return 'Dart in Action';
+}
+
+
+Future<String> fetchBroken() async {
+  await Future.delayed(
+    Duration(milliseconds: 500),
+  );
+
+  throw Exception('Server down');
+}
 void main() async {
   part1();
   part2();
@@ -229,8 +280,70 @@ void part4() {
 
 void part5() {
   print('--- Part 5 ---');
+  var stock = buildStock();
+
+  for (var title in [
+    'Dart in Action',
+    'Flutter Basics',
+    'Unknown Book'
+  ]) {
+    try {
+      checkOut(stock, title);
+      print('Checked out: $title');
+    } on BookNotAvailableException catch (e) {
+      print('Sorry: "${e.title}" has no copies left');
+    } on BookNotFoundException catch (e) {
+      print('Not found: "${e.title}"');
+    } finally {
+      print('Transaction logged.');
+    }
+  }
+
+  print(
+    'Copies left of Dart in Action: ${stock['Dart in Action']}',
+  );
+
+  try {
+    findBook('Missing');
+  } on StateError {
+    print('Search failed: no such book');
+  }
 }
 
 Future<void> part6() async {
   print('--- Part 6 ---');
+
+  print('Fetching...');
+
+  final title = await fetchBookOfTheDay();
+
+  print('Book of the day: $title');
+
+  try {
+    await fetchBroken();
+  } catch (e) {
+    print('Fetch failed: $e');
+  }
 }
+
+//Answers to questions
+// 1. When would you choose fold over reduce?
+// I would choose fold when the list might be empty because fold has a starting
+// value, while reduce needs at least one element.
+
+
+// 2. What does it mean that a closure "captures" a variable? Which variable
+// was captured in makeCounter?
+// A closure captures a variable when it keeps access to that variable even
+// after the outer function has finished. In makeCounter, the captured variable
+// was count.
+
+
+// 3. Why must on BookNotAvailableException come before a general catch (e)?
+// The specific on clause must come first so BookNotAvailableException is handled
+// specifically before a general catch (e) can catch all types of exceptions.
+
+
+// 4. Why does forgetting await still compile, but give the wrong result?
+// It still compiles because the function returns a Future<String>, which is a
+// valid value, but without await we get the Future instead of the actual String result.
