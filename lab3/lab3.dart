@@ -152,6 +152,30 @@ List<OrderLine> buildReceipt() {
       ),
   ];
 }
+
+
+//step 10 
+class Coupon {
+  static final Map<String, Coupon> _cache = {};
+  final String code;
+  final int percent;
+  final int minSpend;
+
+  Coupon(this.code, this.percent): minSpend = percent * 70,
+        assert(percent >= 1 && percent <= 50);
+  factory Coupon.fromCode(String code) {
+    return _cache.putIfAbsent(
+      code,
+      () => Coupon(code, couponPercent),
+    );
+  }
+  int discountOn(int amount) {
+    if (amount >= minSpend) {
+      return amount * percent ~/ 100;
+    }
+    return 0;
+  }
+}
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
   step1();
@@ -279,4 +303,41 @@ void step9() {
   print('Step 9: receipt total = $receiptTotal');
   print('Step 9: log size = ${log.entries.length}');
 }
-void step10() { print('--- Step 10 ---'); }
+void step10() {
+  print('--- Step 10 ---');
+  String code = 'CAFE${seed.toString().padLeft(2, '0')}';
+  Coupon c1 = Coupon.fromCode(code);
+  Coupon c2 = Coupon.fromCode(code);
+  int receipt = 0;
+  for (OrderLine line in buildReceipt()) {
+    receipt += line.grand;
+  }
+  int discount = c1.discountOn(receipt);
+  print(
+    'Step 10: ${c1.code} gives ${c1.percent}% off, min spend ${c1.minSpend}',
+  );
+  print('Step 10: cached? ${identical(c1, c2)}');
+  print(
+    'Step 10: receipt $receipt, discount $discount, payable ${receipt - discount}',
+  );
+}
+
+
+// Q1. Animal(this.name, this.type); and the verbose constructor give the same result. What does the shorthand save you?
+// Answer: The shorthand saves us from writing this.name = name and this.type = type
+// manually inside the constructor body. It makes the constructor shorter and cleaner.
+
+
+// Q2. When would you choose a named constructor, and when a factory constructor?
+// Answer: A named constructor is useful when a class needs different ways to create
+// an object. A factory constructor is useful when we may want to return an existing object instead of always creating a new one.
+
+
+// Q3. What is the difference between assigning a field in a constructor body and assigning it in an initializer list?
+// Answer: A constructor body assigns fields after the object has been initialized,
+// while an initializer list assigns fields before the constructor body runs and can be used to initialize final fields.
+
+
+/* Q4. Give one reason to use a getter instead of storing the value in a field, and one reason to use a setter instead of a public field.
+// Answer: A getter can expose computed data without storing it separately. A setter can validate or control a value before storing it.
+*/
