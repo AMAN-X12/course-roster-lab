@@ -129,6 +129,23 @@ int applyDiscount(int fee) {
 return fee * (100 - discountPercent) ~/ 100;
 }
 }
+
+
+
+extension MoneyText on int {
+  String get rs => 'Rs $this';
+}
+
+extension Initials on String {
+  String get initials =>
+      split(' ').map((w) => w[0]).join();
+}
+
+extension ShelfMath on List<LibraryItem> {
+  int totalLateFee(int days) =>
+      fold(0, (sum, item) => sum + item.lateFee(days));
+}
+
 void main() { 
   print('Seed: $seed (t=$t, u=$u)'); 
   step1(); 
@@ -210,7 +227,23 @@ print('Step 6: max loans = ${type.maxLoans}');
 print('Step 6: book fee $fee -> ${type.applyDiscount(fee)} after discount',);
 //MemberType.student is safer than the string 'student' because the enum restricts choices to defined member types.
 }
-void step7() { print('--- Step 7 ---'); } 
+
+void step7() {
+  print('--- Step 7 ---');
+  MemberType type = MemberType.values[seed % 3];
+  int fee = mainBook().lateFee(daysLate);
+  int discountedFee = type.applyDiscount(fee);
+  List<LibraryItem> shelf = [
+    mainBook(),
+    mainMagazine(),
+    mainDvd(),
+  ];
+  print('Step 7: ${discountedFee.rs}');
+  print('Step 7: initials of "${titles[u]}" = ${titles[u].initials}');
+  print('Step 7: shelf fee for $daysLate days = ${shelf.totalLateFee(daysLate).rs}');
+  // extension lets us write 72.rs, making formatting feel like a natural operation on an integer without changing Dart's int class.
+}
+
 void step8() { print('--- Step 8 ---'); } 
 void step9() { print('--- Step 9 ---'); } 
 void step10() { print('--- Step 10 ---'); } 
