@@ -29,8 +29,13 @@ final int shelfSize = 3 + u % 4;            // items on the shelf in Steps 9-10
 abstract class LibraryItem {
   final String title;
   final int year;
+  static int created = 0;
   
   LibraryItem(this.title, this.year);
+
+  static int capFee(int fee) {
+    return fee > feeCap ? feeCap : fee;
+  }
   String describe() => '$title ($year)';
   int lateFee(int days);
 }
@@ -128,6 +133,29 @@ const MemberType(this.maxLoans, this.discountPercent);
 int applyDiscount(int fee) {
 return fee * (100 - discountPercent) ~/ 100;
 }
+}
+
+
+List<LibraryItem> buildShelf() {
+  List<LibraryItem> shelf = [];
+  for (int k = 0; k < shelfSize; k++) {
+    int i = (u + k) % 10;
+    if (k % 3 == 0) {
+      shelf.add(
+        Book(titles[i], yearOf(i), 100 + 3 * seed),
+      );
+    } else if (k % 3 == 1) {
+      shelf.add(
+        Magazine(titles[i], yearOf(i), 1 + (t + k) % 12),
+      );
+    } else {
+      shelf.add(
+        Dvd(titles[i], yearOf(i), 90 + seed % 40),
+      );
+    }
+  }
+
+  return shelf;
 }
 
 
@@ -281,5 +309,23 @@ void step8() {
   // When == is overridden, hashCode must also be overridden so equal objects have the same hash code and sets and maps can handle them correctly.
 }
 
-void step9() { print('--- Step 9 ---'); } 
+
+void step9() {
+  print('--- Step 9 ---');
+  LibraryItem.created = 0;
+  buildShelf();
+  List<LibraryItem> shelf = buildShelf();
+  print('Step 9: items created = ${LibraryItem.created}');
+  print(
+    'Step 9: capped fee = ${LibraryItem.capFee(shelf.first.lateFee(daysBig))} (cap $feeCap)',
+  );
+  print(
+    'Step 9: const copies identical? ${identical(const Fine(10), const Fine(10))}',
+  );
+  print(
+    'Step 9: new copies identical? ${identical(Fine(10), Fine(10))}',
+  );
+  // A static member belongs to the class itself, so it can be accessed through LibraryItem.created without creating a LibraryItem object.
+}
+
 void step10() { print('--- Step 10 ---'); } 
