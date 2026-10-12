@@ -194,6 +194,21 @@ class Fine {
 }
 
 
+class Member {
+  final String name;
+  final MemberType type;
+
+  Member(this.name, this.type);
+
+  Fine feeFor(LibraryItem item, int days) {
+    int fee = item.lateFee(days);
+    int cappedFee = LibraryItem.capFee(fee);
+    int discountedFee = type.applyDiscount(cappedFee);
+
+    return Fine(discountedFee);
+  }
+}
+
 void main() { 
   print('Seed: $seed (t=$t, u=$u)'); 
   step1(); 
@@ -328,4 +343,23 @@ void step9() {
   // A static member belongs to the class itself, so it can be accessed through LibraryItem.created without creating a LibraryItem object.
 }
 
-void step10() { print('--- Step 10 ---'); } 
+
+void step10() {
+  print('--- Step 10 ---');
+  List<LibraryItem> shelf = buildShelf();
+  Member member = Member(
+    'S$seed',
+    MemberType.values[seed % 3],
+  );
+
+  Fine total = shelf.fold(
+    Fine(0),
+    (sum, item) => sum + member.feeFor(item, daysLate),
+  );
+  int borrowable = shelf.where((item) => item is Borrowable).length;
+  int renewable = shelf.where((item) => item is Renewable).length;
+  print('Step 10: ${shelf.length} items, $borrowable borrowable, $renewable renewable',);
+  print('Step 10: ${member.name} (${member.type.name}) owes $total',);
+  print('Step 10: over the cap? ${total > Fine(feeCap)}');
+  // Polymorphism lets each LibraryItem implement lateFee differently, so Member.feeFor can calculate fees without checking the item's type.
+}
