@@ -26,12 +26,13 @@ final int shelfSize = 3 + u % 4;            // items on the shelf in Steps 9-10
   
 
 
-class LibraryItem {
+abstract class LibraryItem {
   final String title;
   final int year;
   
   LibraryItem(this.title, this.year);
   String describe() => '$title ($year)';
+  int lateFee(int days);
 }
 
 class Book extends LibraryItem {
@@ -41,21 +42,34 @@ class Book extends LibraryItem {
   @override
   String describe() =>
       '${super.describe()}, $pages pages';
-}
-
-
-Book mainBook() {
-  return Book(titles[u], yearOf(u), 100 + 3 * seed);
+  
+  @override
+  int lateFee(int days) => days * feePerDay;
 }
 
 class Magazine extends LibraryItem {
   final int issue;
-
   Magazine(super.title, super.year, this.issue);
-
   @override
   String describe() =>
       '${super.describe()}, issue $issue';
+  
+  @override
+  int lateFee(int days) => days * (feePerDay ~/ 2);
+}
+
+class Dvd extends LibraryItem {
+  final int minutes;
+  Dvd(super.title, super.year, this.minutes);
+  @override
+  String describe() =>
+      '${super.describe()}, $minutes min';
+  @override
+  int lateFee(int days) => days * feePerDay * 2;
+}
+
+Book mainBook() {
+  return Book(titles[u], yearOf(u), 100 + 3 * seed);
 }
 
 Magazine mainMagazine() {
@@ -66,6 +80,12 @@ Magazine mainMagazine() {
   );
 }
 
+Dvd mainDvd() {
+  int i = (u + 2) % 10;
+  return Dvd(
+    titles[i],yearOf(i),90 + seed % 40,
+  );
+}
 
 
 void main() { 
@@ -101,7 +121,14 @@ void step2() {
   //without the override,the describe method creates a new method. The method that is being inherited will be used.
 }
 
-void step3() { print('--- Step 3 ---'); } 
+void step3() {
+  print('--- Step 3 ---');
+  print( 'Step 3: Book late fee for $daysLate days = ${mainBook().lateFee(daysLate)}', );
+  print('Step 3: Magazine late fee for $daysLate days = ${mainMagazine().lateFee(daysLate)}',);
+  print('Step 3: Dvd late fee for $daysLate days = ${mainDvd().lateFee(daysLate)}',);
+  // An abstract class cannot be instantiated directly because it represents a general concept and may contain methods without implementations.
+}
+
 void step4() { print('--- Step 4 ---'); } 
 void step5() { print('--- Step 5 ---'); } 
 void step6() { print('--- Step 6 ---'); } 
