@@ -146,6 +146,26 @@ extension ShelfMath on List<LibraryItem> {
       fold(0, (sum, item) => sum + item.lateFee(days));
 }
 
+class Fine {
+  final int amount;
+  const Fine(this.amount);
+  Fine operator +(Fine o) {
+    return Fine(amount + o.amount);
+  }
+  bool operator >(Fine o) {
+    return amount > o.amount;
+  }
+  @override
+  bool operator ==(Object other) {
+    return other is Fine && other.amount == amount;
+  }
+  @override
+  int get hashCode => amount.hashCode;
+  @override
+  String toString() => 'Fine($amount)';
+}
+
+
 void main() { 
   print('Seed: $seed (t=$t, u=$u)'); 
   step1(); 
@@ -244,6 +264,22 @@ void step7() {
   // extension lets us write 72.rs, making formatting feel like a natural operation on an integer without changing Dart's int class.
 }
 
-void step8() { print('--- Step 8 ---'); } 
+
+void step8() {
+  print('--- Step 8 ---');
+  Fine f1 = Fine(mainBook().lateFee(daysLate));
+  Fine f2 = Fine(mainMagazine().lateFee(daysLate));
+  Set<Fine> fines = {
+    f1,
+    Fine(f1.amount),
+    f2,
+  };
+  print('Step 8: $f1 + $f2 = ${f1 + f2}');
+  print('Step 8: first bigger? ${f1 > f2}');
+  print('Step 8: equal copies? ${f1 == Fine(f1.amount)}');
+  print('Step 8: set size = ${fines.length}');
+  // When == is overridden, hashCode must also be overridden so equal objects have the same hash code and sets and maps can handle them correctly.
+}
+
 void step9() { print('--- Step 9 ---'); } 
 void step10() { print('--- Step 10 ---'); } 
