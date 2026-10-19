@@ -80,6 +80,8 @@ class HomePage extends StatelessWidget {
                 Text('Max: $maxCount', key: const Key('info-max')),
               ],
             ),
+            const SizedBox(height: 12),
+            GoalBanner(count: startCount, max: maxCount),
           ],
         ),
       ),
@@ -125,6 +127,30 @@ class StudentCard extends StatelessWidget {
 }
 //think step-2: The fields are final because a StatelessWidget receives its configuration through its constructor and does not reassign these fields. Without final,
 // the fields could be reassigned, which Dart allows, but it would not fulfill the requiremnet of this lab task.
+
+//think task-4:// GoalBanner does not need setState because it receives count and maxthrough its constructor. To show a new count, its parent can rebuild and provide updated values to GoalBanner.
+
+ // Stateless: the banner calculates progress from the values it receives.
+class GoalBanner extends StatelessWidget {
+  final int count;
+  final int max;
+
+  const GoalBanner({
+    super.key,
+    required this.count,
+    required this.max,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final percent = count * 100 ~/ max;
+
+    return Text(
+      'Progress: $count of $max ($percent%)',
+      key: const Key('progress'),
+    );
+  }
+}
 
 // Provided for Step 7. It has a bug on purpose. Do not rename anything.
 class BuggyCounter extends StatefulWidget {
