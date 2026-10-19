@@ -60,13 +60,52 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Study Tracker: $course'),
       ),
-      body: const Center(
-        child: Text('Hello'),
+      body: StudentCard(
+  name: studentName,
+  roll: rollNo,
+  course: course,
+),
+    );
+  }
+}
+// think-step 1:: runApp receives the root widget of the app, while MaterialApp's home specifies the widget displayed as the main screen.
+
+
+
+ // Stateless: the card displays information provided to it.
+class StudentCard extends StatelessWidget {
+  final String name;
+  final String roll;
+  final String course;
+
+  const StudentCard({
+    super.key,
+    required this.name,
+    required this.roll,
+    required this.course,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // The fields are final because this widget receives its data
+    // rather than managing changing values itself.
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Name: $name', key: const Key('student-name')),
+            Text('Roll no: $roll', key: const Key('student-roll')),
+            Text('Course: $course', key: const Key('student-course')),
+          ],
+        ),
       ),
     );
   }
 }
-// runApp receives the root widget of the app, while MaterialApp's home specifies the widget displayed as the main screen.
+//think step-2: The fields are final because a StatelessWidget receives its configuration through its constructor and does not reassign these fields. Without final,
+// the fields could be reassigned, which Dart allows, but it would not fulfill the requiremnet of this lab task.
 
 // Provided for Step 7. It has a bug on purpose. Do not rename anything.
 class BuggyCounter extends StatefulWidget {
