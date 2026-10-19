@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -44,33 +43,24 @@ class LabApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Study Tracker',
-      home: HomePage(),
-    );
-  } 
+    return const MaterialApp(title: 'Study Tracker', home: HomePage());
+  }
 }
+
 //think task-3:: The widget tree is the hierarchy of widgets inside other widgets. The Max Text is nested inside LabApp, MaterialApp, HomePage, Scaffold,SingleChildScrollView, Column, and Row. Counting Text itself, it is level 8.
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Study Tracker: $course'),
-      ),
+      appBar: AppBar(title: Text('Study Tracker: $course')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            StudentCard(
-              name: studentName,
-              roll: rollNo,
-              course: course,
-            ),
+            StudentCard(name: studentName, roll: rollNo, course: course),
             const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,22 +71,19 @@ class HomePage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-              const Tally(),
-              const SizedBox(height: 12),
-              const Countdown(),
-const BuggyCounter(),
+            const Tally(),
+            const SizedBox(height: 12),
+            const Countdown(),
+            const BuggyCounter(),
           ],
         ),
       ),
     );
   }
-
 }
 // think-step 1:: runApp receives the root widget of the app, while MaterialApp's home specifies the widget displayed as the main screen.
 
-
-
- // Stateless: the card displays information provided to it.
+// Stateless: the card displays information provided to it.
 class StudentCard extends StatelessWidget {
   final String name;
   final String roll;
@@ -133,16 +120,12 @@ class StudentCard extends StatelessWidget {
 
 //think task-4:// GoalBanner does not need setState because it receives count and maxthrough its constructor. To show a new count, its parent can rebuild and provide updated values to GoalBanner.
 
- // Stateless: the banner calculates progress from the values it receives.
+// Stateless: the banner calculates progress from the values it receives.
 class GoalBanner extends StatelessWidget {
   final int count;
   final int max;
 
-  const GoalBanner({
-    super.key,
-    required this.count,
-    required this.max,
-  });
+  const GoalBanner({super.key, required this.count, required this.max});
 
   @override
   Widget build(BuildContext context) {
@@ -165,31 +148,29 @@ class Tally extends StatefulWidget {
 class _TallyState extends State<Tally> {
   int _count = startCount;
 
-  
-void _plus() {
-  setState(() {
-    _count += stepSize;
-    if (_count > maxCount) {
-      _count = maxCount;
-    }
-  });
-}
+  void _plus() {
+    setState(() {
+      _count += stepSize;
+      if (_count > maxCount) {
+        _count = maxCount;
+      }
+    });
+  }
 
-void _minus() {
-  setState(() {
-    _count -= stepSize;
-    if (_count < 0) {
-      _count = 0;
-    }
-  });
-}
+  void _minus() {
+    setState(() {
+      _count -= stepSize;
+      if (_count < 0) {
+        _count = 0;
+      }
+    });
+  }
 
-void _reset() {
-  setState(() {
-    _count = startCount;
-  });
-}
-
+  void _reset() {
+    setState(() {
+      _count = startCount;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -198,29 +179,28 @@ void _reset() {
       children: [
         Text('Count: $_count', key: const Key('count')),
         GoalBanner(count: _count, max: maxCount),
-       
-Row(
-  children: [
-    ElevatedButton(
-      key: const Key('plus'),
-      onPressed: _plus,
-      child: Text('+$stepSize'),
-    ),
-    const SizedBox(width: 8),
-    ElevatedButton(
-      key: const Key('minus'),
-      onPressed: _minus,
-      child: Text('-$stepSize'),
-    ),
-    const SizedBox(width: 8),
-    OutlinedButton(
-      key: const Key('reset'),
-      onPressed: _reset,
-      child: const Text('Reset'),
-    ),
-  ],
-),
 
+        Row(
+          children: [
+            ElevatedButton(
+              key: const Key('plus'),
+              onPressed: _plus,
+              child: Text('+$stepSize'),
+            ),
+            const SizedBox(width: 8),
+            ElevatedButton(
+              key: const Key('minus'),
+              onPressed: _minus,
+              child: Text('-$stepSize'),
+            ),
+            const SizedBox(width: 8),
+            OutlinedButton(
+              key: const Key('reset'),
+              onPressed: _reset,
+              child: const Text('Reset'),
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -263,16 +243,10 @@ class _CountdownState extends State<Countdown> {
   @override
   Widget build(BuildContext context) {
     if (_left > 0) {
-      return Text(
-        'Time left: $_left s',
-        key: const Key('time-left'),
-      );
+      return Text('Time left: $_left s', key: const Key('time-left'));
     }
 
-    return const Text(
-      'Time is up!',
-      key: Key('time-left'),
-    );
+    return const Text('Time is up!', key: Key('time-left'));
   }
 }
 
@@ -296,11 +270,11 @@ class _BuggyCounterState extends State<BuggyCounter> {
         ElevatedButton(
           key: const Key('bug-button'),
           onPressed: () {
-  setState(() {
-    _clicks += bugStep;
-  });
-  //think task-7:Without setState, three taps change _clicks to 3 internally, but the screen continues displaying 0 because Flutter was not notified to rebuild the widget.
-},
+            setState(() {
+              _clicks += bugStep;
+            });
+            //think task-7:Without setState, three taps change _clicks to 3 internally, but the screen continues displaying 0 because Flutter was not notified to rebuild the widget.
+          },
           child: Text('+$bugStep'),
         ),
       ],
