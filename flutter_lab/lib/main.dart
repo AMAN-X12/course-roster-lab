@@ -38,20 +38,35 @@ final List<String> lifecycleLog = <String>[];
 void main() => runApp(const LabApp());
 
 // Keep the name LabApp and its const constructor.
+
 class LabApp extends StatelessWidget {
   const LabApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Setup OK: seed $seed (t=$t, u=$u)'),
-        ),
+    return const MaterialApp(
+      title: 'Study Tracker',
+      home: HomePage(),
+    );
+  } 
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Study Tracker: $course'),
+      ),
+      body: const Center(
+        child: Text('Hello'),
       ),
     );
   }
 }
+// runApp receives the root widget of the app, while MaterialApp's home specifies the widget displayed as the main screen.
 
 // Provided for Step 7. It has a bug on purpose. Do not rename anything.
 class BuggyCounter extends StatefulWidget {
