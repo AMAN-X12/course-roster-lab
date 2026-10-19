@@ -82,6 +82,8 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 12),
               const Tally(),
+              const SizedBox(height: 12),
+const BuggyCounter(),
           ],
         ),
       ),
@@ -243,8 +245,11 @@ class _BuggyCounterState extends State<BuggyCounter> {
         ElevatedButton(
           key: const Key('bug-button'),
           onPressed: () {
-            _clicks += bugStep;
-          },
+  setState(() {
+    _clicks += bugStep;
+  });
+  //think task-7:Without setState, three taps change _clicks to 3 internally, but the screen continues displaying 0 because Flutter was not notified to rebuild the widget.
+},
           child: Text('+$bugStep'),
         ),
       ],
