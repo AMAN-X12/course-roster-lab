@@ -122,6 +122,8 @@ class HomePage extends StatelessWidget {
 const InfoPanel(),
 const SizedBox(height: 12),
 const SummaryRow(),
+const SizedBox(height: 12),
+const ShareRow(),
 ],
         ),
       ),
@@ -180,6 +182,43 @@ children: [
   ),
 ],
 
+    );
+  }
+}
+
+class ShareRow extends StatelessWidget {
+  const ShareRow({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      key: const Key('share-row'),
+      children: [
+        SizedBox(
+          key: const Key('fixed'),
+          width: fixedW,
+          child: ElevatedButton(
+            onPressed: () {},
+            child: const Text('F'),
+          ),
+        ),
+        Expanded(
+          flex: flexA,
+          child: ElevatedButton(
+            key: const Key('exp'),
+            onPressed: () {},
+            child: const Text('Exp'),
+          ),
+        ),
+        Flexible(
+          flex: flexB,
+          child: ElevatedButton(
+            key: const Key('flex'),
+            onPressed: () {},
+            child: const Text('Flex'),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -392,3 +431,4 @@ class InfoPanel extends StatelessWidget {
 }
 // Think-part-6: In a Column, the main axis is vertical because its children are arranged from top to bottom. The cross axis is horizontal, so CrossAxisAlignment.center moves children left or right to the horizontal center rather than moving them up or down.
 //think-part-7:Constraints go down from the Row to each Expanded child, limiting the width available to its Text. The Text calculates the height needed to wrap within that width, and its size goes back up the layout tree. Expanded divides the available width into equal shares.
+// think-part-8: Expanded forces its child to fill its allocated share (FlexFit.tight). Flexible uses FlexFit.loose by default, so its child may remain smaller than the available share. Swapping them changes which button must fill its allocation and which may stay at its natural size.
