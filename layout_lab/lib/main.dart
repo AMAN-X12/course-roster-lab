@@ -113,8 +113,7 @@ class HomePage extends StatelessWidget {
           children: [
             const SettingsCard(),
             const SizedBox(height: 12),
-            // Add each new widget BELOW the previous one, in the order the
-            // steps tell you, with a SizedBox(height: 12) between widgets.
+            const Clock(),
           ],
         ),
       ),
@@ -165,6 +164,41 @@ class SummaryRow extends StatelessWidget {
           key: const Key('sum-c'),
         ),
       ],
+    );
+  }
+}
+
+
+// Step 1: Clock using Timer and StatefulWidget.
+class Clock extends StatefulWidget {
+  const Clock({super.key});
+
+  @override
+  State<Clock> createState() => _ClockState();
+}
+
+class _ClockState extends State<Clock> {
+  late Timer _timer;
+  int _seconds = startSec;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Start the timer once
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() => _seconds += tick);
+
+      if (_seconds >= stopAt) {
+        timer.cancel();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'Session: $_seconds s',key: const Key('clock'),
     );
   }
 }
