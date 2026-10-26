@@ -214,10 +214,57 @@ Widget build(BuildContext context) {
       Text(
         'Builds: $_builds',
         key: const Key('builds'),
+
       ),
+     Probe(seconds: _seconds),
     ],
   );
 }
 }
+
+
 // think-part-1: We start the Timer in initState because it runs once. Starting it in build would create additional timers on rebuilds
 //think-part-2: build go up one by one and not by two is because the timer is set to tick every second, and the build method is called each time the state changes.
+
+
+// Step 3
+class Probe extends StatelessWidget {
+  final int seconds;
+
+  const Probe({super.key, required this.seconds});
+
+  @override
+  Widget build(BuildContext context) {
+    final above =
+        context.findAncestorWidgetOfExactType<Scaffold>() != null;
+
+    
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Seen at: $seconds s',
+          key: const Key('probe-seen'),
+        ),
+        Text(
+          'Widget #${identityHashCode(this)}',
+          key: const Key('probe-widget'),
+        ),
+        Text(
+          'Element #${identityHashCode(context)}',
+          key: const Key('probe-element'),
+        ),
+        Text(
+          'Context belongs to: ${context.widget.runtimeType}',
+          key: const Key('probe-context'),
+        ),
+        Text(
+          'Scaffold above me: $above',
+          key: const Key('probe-above'),
+        ),
+      ],
+    );
+  }
+}
+// think-part-3: A Widget is cheap and can be discarded and recreated on rebuild. The Element persists and keeps the State associated with a StatefulWidget.
