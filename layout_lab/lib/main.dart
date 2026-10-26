@@ -180,11 +180,11 @@ class Clock extends StatefulWidget {
 class _ClockState extends State<Clock> {
   late Timer _timer;
   int _seconds = startSec;
-
+ int _builds = 0;
   @override
   void initState() {
     super.initState();
-
+    lifecycleLog.add('initState');
     // Start the timer once
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() => _seconds += tick);
@@ -194,11 +194,30 @@ class _ClockState extends State<Clock> {
       }
     });
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      'Session: $_seconds s',key: const Key('clock'),
-    );
-  }
+@override
+void dispose() {
+  _timer.cancel();
+  lifecycleLog.add('dispose');
+  super.dispose();
 }
+@override
+Widget build(BuildContext context) {
+  _builds++;
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        'Session: $_seconds s',
+        key: const Key('clock'),
+      ),
+      Text(
+        'Builds: $_builds',
+        key: const Key('builds'),
+      ),
+    ],
+  );
+}
+}
+// think-part-1: We start the Timer in initState because it runs once. Starting it in build would create additional timers on rebuilds
+//think-part-2: build go up one by one and not by two is because the timer is set to tick every second, and the build method is called each time the state changes.
