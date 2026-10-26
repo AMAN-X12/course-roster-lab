@@ -120,6 +120,8 @@ class HomePage extends StatelessWidget {
  const SwapBoard(),
  const SizedBox(height: 12),
 const InfoPanel(),
+const SizedBox(height: 12),
+const SummaryRow(),
 ],
         ),
       ),
@@ -156,20 +158,28 @@ class SummaryRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: [
-        Text(
-          'Part A: read the widget tree of the $course board from top to bottom.',
-          key: const Key('sum-a'),
-        ),
-        Text(
-          'Part B: build each box from small widgets and never extend a built-in class.',
-          key: const Key('sum-b'),
-        ),
-        Text(
-          'Part C: break the layout on purpose, then fix it with Expanded or Wrap.',
-          key: const Key('sum-c'),
-        ),
-      ],
+     
+children: [
+  Expanded(
+    child: Text(
+      'Part A: read the widget tree of the $course board from top to bottom.',
+      key: const Key('sum-a'),
+    ),
+  ),
+  Expanded(
+    child: Text(
+      'Part B: build each box from small widgets and never extend a built-in class.',
+      key: const Key('sum-b'),
+    ),
+  ),
+  Expanded(
+    child: Text(
+      'Part C: break the layout on purpose, then fix it with Expanded or Wrap.',
+      key: const Key('sum-c'),
+    ),
+  ),
+],
+
     );
   }
 }
@@ -381,3 +391,4 @@ class InfoPanel extends StatelessWidget {
   }
 }
 // Think-part-6: In a Column, the main axis is vertical because its children are arranged from top to bottom. The cross axis is horizontal, so CrossAxisAlignment.center moves children left or right to the horizontal center rather than moving them up or down.
+//think-part-7:Constraints go down from the Row to each Expanded child, limiting the width available to its Text. The Text calculates the height needed to wrap within that width, and its size goes back up the layout tree. Expanded divides the available width into equal shares.
