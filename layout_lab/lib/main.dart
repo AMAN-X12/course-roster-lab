@@ -111,10 +111,20 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SettingsCard(),
-            const SizedBox(height: 12),
-            const Clock(),
-          ],
+  const SettingsCard(),
+  const SizedBox(height: 12),
+  const Welcome(),
+  const SizedBox(height: 12),
+  const Clock(),
+  const SizedBox(height: 12),
+  Row(
+    children: [
+      Tile(tileA),
+      Tile(tileB),
+      Tile(tileC),
+    ],
+  ),
+],
         ),
       ),
     );
@@ -238,8 +248,6 @@ class Probe extends StatelessWidget {
     final above =
         context.findAncestorWidgetOfExactType<Scaffold>() != null;
 
-    
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -268,3 +276,43 @@ class Probe extends StatelessWidget {
   }
 }
 // think-part-3: A Widget is cheap and can be discarded and recreated on rebuild. The Element persists and keeps the State associated with a StatefulWidget.
+
+
+// Step 4: A small widget composed from existing Flutter widgets.
+class Welcome extends StatelessWidget {
+  const Welcome({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        'Welcome, $studentName',
+        key: const Key('welcome'),
+      ),
+    );
+  }
+}
+
+class Tile extends StatefulWidget {
+  final String label;
+
+  const Tile(this.label, {super.key});
+
+  @override
+  State<Tile> createState() => _TileState();
+}
+
+class _TileState extends State<Tile> {
+  int taps = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        setState(() => taps++);
+      },
+      child: Text('${widget.label}: $taps'),
+    );
+  }
+}
+// think-step-4:This style is called composition. We combine an existing ElevatedButton with our own State and behaviour instead of inheriting from the button class. Composition encourages reusable, focused widgets.
